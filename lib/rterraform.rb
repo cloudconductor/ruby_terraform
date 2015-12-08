@@ -1,4 +1,4 @@
-require "rterraform/version"
+require 'rterraform/version'
 
 module Rterraform
   # Your code goes here...
