@@ -3,3 +3,6 @@ LineLength:
 
 MethodLength:
   Max: 20
+
+Documentation:
+  Enabled: false
