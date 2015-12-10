@@ -27,6 +27,14 @@ module Rterraform
       end
     end
 
+    def apply(variables = {}, options = {})
+      options = { input: false, 'no-color' => nil }.merge(options)
+
+      status, _stdout, stderr = run('apply', variables, options)
+      fail "Execute terraform apply has been failed\n#{stderr}" unless status.success?
+      true
+    end
+
     private
 
     def run(subcommand, variables = {}, options = {})

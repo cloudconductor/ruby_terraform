@@ -80,6 +80,33 @@ module Rterraform
       end
     end
 
+    describe '#apply' do
+      before do
+        status = double(:status, success?: true)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+      end
+
+      it 'call #run with apply subcommand and -input option' do
+        expect(@client).to receive(:run).with('apply', kind_of(Hash), hash_including(:input))
+        @client.apply
+      end
+
+      it 'call #run with apply subcommand and -no-color option' do
+        expect(@client).to receive(:run).with('apply', kind_of(Hash), hash_including('no-color'))
+        @client.apply
+      end
+
+      it 'raise error when terraform status code indicates failed' do
+        status = double(:status, success?: false)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+        expect { @client.apply }.to raise_error(RuntimeError)
+      end
+
+      it 'return true when execute terraform successfully' do
+        expect(@client.apply).to be_truthy
+      end
+    end
+
     describe '#run' do
       before do
         allow(Dir).to receive(:chdir).with('directory').and_yield
