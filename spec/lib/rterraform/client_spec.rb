@@ -107,6 +107,39 @@ module Rterraform
       end
     end
 
+    describe '#output' do
+      before do
+        status = double(:status, success?: true)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+      end
+
+      it 'call #run with output subcommand and -no-color option' do
+        expect(@client).to receive(:run).with('output', kind_of(Hash), hash_including('no-color'))
+        @client.output
+      end
+
+      it 'raise error when terraform status code indicates failed' do
+        status = double(:status, success?: false)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+        expect { @client.output }.to raise_error(RuntimeError)
+      end
+
+      it 'return output hash when execute terraform successfully' do
+        stdout = <<-EOS
+cluster_addresses = 10.0.1.71, 10.0.1.218, 10.0.1.217, 10.0.1.126
+frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
+        EOS
+
+        status = double(:status, success?: true)
+        allow(@client).to receive(:run).and_return([status, stdout, 'stderr'])
+
+        expect(@client.output).to eq(
+          'cluster_addresses' => '10.0.1.71, 10.0.1.218, 10.0.1.217, 10.0.1.126',
+          'frontend_addresses' => '52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144'
+        )
+      end
+    end
+
     describe '#run' do
       before do
         allow(Dir).to receive(:chdir).with('directory').and_yield

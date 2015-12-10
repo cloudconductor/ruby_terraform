@@ -35,6 +35,15 @@ module Rterraform
       true
     end
 
+    def output(variables = {}, options = {})
+      options = { 'no-color' => nil }.merge(options)
+
+      status, stdout, stderr = run('output', variables, options)
+      fail "Execute terraform output has been failed\n#{stderr}" unless status.success?
+
+      Hash[stdout.split("\n").map { |line| line.split(' = ') }]
+    end
+
     private
 
     def run(subcommand, variables = {}, options = {})
