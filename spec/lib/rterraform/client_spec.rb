@@ -156,7 +156,7 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
             destroy: nil
           }
 
-          expected_command = '/usr/bin/terraform plan -backup=directory -destroy -var key1=value1 -var key2=value2 directory'
+          expected_command = '/usr/bin/terraform plan -backup=directory -destroy -var key1=value1 -var key2=value2'
           expect(@client).to receive(:systemu).with(expected_command)
           @client.send(:run, 'plan', variables, options)
         end
@@ -173,7 +173,7 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
             destroy: nil
           }
 
-          expected_command = '/usr/bin/terraform plan -backup=directory -destroy -var key1=value1 -var key2=value2 directory'
+          expected_command = '/usr/bin/terraform plan -backup=directory -destroy -var key1=value1 -var key2=value2'
           expect(@client).to receive(:systemu).with(expected_command)
           @client.send(:run, 'plan', variables, options)
         end

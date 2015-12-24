@@ -49,7 +49,7 @@ module Rterraform
     def run(subcommand, variables = {}, options = {})
       Dir.chdir(@directory) do
         terraform_path = @options[:terraform_path] || 'terraform'
-        command = "#{terraform_path} #{subcommand} #{options2command(options)} #{vars2command(variables)} #{@directory}"
+        command = "#{terraform_path} #{subcommand} #{options2command(options)} #{vars2command(variables)}"
         systemu(command).tap do |args|
           yield(*args) if block_given?
         end
