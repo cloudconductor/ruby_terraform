@@ -45,7 +45,7 @@ module Rterraform
     end
 
     def destroy(variables = {}, options = {})
-      options = { input: false, 'no-color' => nil }.merge(options)
+      options = { force: nil, 'no-color' => nil }.merge(options)
 
       status, _stdout, stderr = run('destroy', variables, options)
       fail "Execute terraform destroy has been failed\n#{stderr}" unless status.success?

@@ -146,8 +146,8 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
         allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
       end
 
-      it 'call #run with destroy subcommand and -input option' do
-        expect(@client).to receive(:run).with('destroy', kind_of(Hash), hash_including(:input))
+      it 'call #run with destroy subcommand and -force option' do
+        expect(@client).to receive(:run).with('destroy', kind_of(Hash), hash_including(:force))
         @client.destroy
       end
 
