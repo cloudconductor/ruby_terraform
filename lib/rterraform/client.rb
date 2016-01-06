@@ -44,6 +44,14 @@ module Rterraform
       Hash[stdout.split("\n").map { |line| line.split(' = ') }]
     end
 
+    def destroy(variables = {}, options = {})
+      options = { input: false, 'no-color' => nil }.merge(options)
+
+      status, _stdout, stderr = run('destroy', variables, options)
+      fail "Execute terraform destroy has been failed\n#{stderr}" unless status.success?
+      true
+    end
+
     private
 
     def run(subcommand, variables = {}, options = {})

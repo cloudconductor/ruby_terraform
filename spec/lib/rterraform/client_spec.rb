@@ -140,6 +140,33 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
       end
     end
 
+    describe '#destroy' do
+      before do
+        status = double(:status, success?: true)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+      end
+
+      it 'call #run with destroy subcommand and -input option' do
+        expect(@client).to receive(:run).with('destroy', kind_of(Hash), hash_including(:input))
+        @client.destroy
+      end
+
+      it 'call #run with destroy subcommand and -no-color option' do
+        expect(@client).to receive(:run).with('destroy', kind_of(Hash), hash_including('no-color'))
+        @client.destroy
+      end
+
+      it 'raise error when terraform status code indicates failed' do
+        status = double(:status, success?: false)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+        expect { @client.destroy }.to raise_error(RuntimeError)
+      end
+
+      it 'return true when execute terraform successfully' do
+        expect(@client.destroy).to be_truthy
+      end
+    end
+
     describe '#run' do
       before do
         allow(Dir).to receive(:chdir).with('directory').and_yield
