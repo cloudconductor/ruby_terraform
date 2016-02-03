@@ -1,6 +1,6 @@
 require 'systemu'
 
-module Rterraform
+module RubyTerraform
   class Client
     def initialize(directory, options)
       @directory = directory

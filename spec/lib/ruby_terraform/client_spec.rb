@@ -1,6 +1,6 @@
-require 'rterraform/client'
+require 'ruby_terraform/client'
 
-module Rterraform
+module RubyTerraform
   describe Client do
     before do
       @options = {

@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rterraform/version'
+require 'ruby_terraform/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'rterraform'
-  spec.version       = Rterraform::VERSION
+  spec.name          = 'ruby_terraform'
+  spec.version       = RubyTerraform::VERSION
   spec.authors       = ['Yo Takezawa']
   spec.email         = ['takezawa.yo@tis.co.jp']
 
   spec.summary       = 'Execute terraform from ruby'
   spec.description   = 'This gem can execute terraform plan, apply or destroy that are provided by hashicorp'
-  spec.homepage      = 'https://github.com/cloudconductor/rterraform'
+  spec.homepage      = 'https://github.com/cloudconductor/ruby_terraform'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'

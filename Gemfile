@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in rterraform.gemspec
+# Specify your gem's dependencies in ruby_terraform.gemspec
 gemspec
 
 group :test do
