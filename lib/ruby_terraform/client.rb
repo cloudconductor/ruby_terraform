@@ -55,12 +55,10 @@ module RubyTerraform
     private
 
     def run(subcommand, variables = {}, options = {})
-      Dir.chdir(@directory) do
-        terraform_path = @options[:terraform_path] || 'terraform'
-        command = "#{terraform_path} #{subcommand} #{options2command(options)} #{vars2command(variables)}"
-        systemu(command).tap do |args|
-          yield(*args) if block_given?
-        end
+      terraform_path = @options[:terraform_path] || 'terraform'
+      command = "#{terraform_path} #{subcommand} #{options2command(options)} #{vars2command(variables)}"
+      systemu(command, cwd: @directory).tap do |args|
+        yield(*args) if block_given?
       end
     end
 
