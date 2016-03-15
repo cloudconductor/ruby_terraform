@@ -35,6 +35,23 @@ module RubyTerraform
       true
     end
 
+    def show(variables = {}, options = {})
+      options = { 'no-color' => nil }.merge(options)
+
+      status, stdout, stderr = run('show', variables, options)
+      fail "Execute terraform show has been failed\n#{stderr}" unless [0, 2].include?(status.exitstatus)
+
+      # Remove outputs
+      stdout = stdout.gsub(/^Outputs:$.*/m, '')
+
+      {}.tap do |hash|
+        stdout.split("\n").each do |line|
+          next unless (match = line.match(/^(\S*):$/))
+          build_hash(hash, match[1])
+        end
+      end
+    end
+
     def output(variables = {}, options = {})
       options = { 'no-color' => nil }.merge(options)
 

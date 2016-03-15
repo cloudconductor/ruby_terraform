@@ -107,6 +107,36 @@ module RubyTerraform
       end
     end
 
+    describe '#show' do
+      before do
+        status = double(:status, exitstatus: 0)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+      end
+
+      it 'call #run with show subcommand and -no-color option' do
+        expect(@client).to receive(:run).with('show', kind_of(Hash), hash_including('no-color'))
+        @client.show
+      end
+
+      it 'raise error when terraform status code indicates failed' do
+        status = double(:status, exitstatus: 1)
+        allow(@client).to receive(:run).and_return([status, 'stdout', 'stderr'])
+        expect { @client.show }.to raise_error(RuntimeError)
+      end
+
+      it 'return resources and outputs when execute successfully' do
+        status = double(:status, exitstatus: 0)
+        stdout = File.read('spec/fixtures/show/correct.txt')
+        allow(@client).to receive(:run).and_return([status, stdout, ''])
+        result = @client.show
+
+        expect(result).to be_is_a(Hash)
+        expect(result.keys).to match_array(%w(module null_resource))
+        expect(result['module'].keys).to match_array(%w(common_network tomcat_cluster_pattern))
+        expect(result['module']['tomcat_cluster_pattern'].keys).to match_array(%w(openstack_compute_floatingip_v2 openstack_compute_instance_v2 openstack_compute_secgroup_v2))
+      end
+    end
+
     describe '#output' do
       before do
         status = double(:status, success?: true)
