@@ -168,10 +168,6 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
     end
 
     describe '#run' do
-      before do
-        allow(Dir).to receive(:chdir).with('directory').and_yield
-      end
-
       describe 'without block' do
         it 'will execute terraform with plan subcommand' do
           variables = {
@@ -184,7 +180,8 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
           }
 
           expected_command = '/usr/bin/terraform plan -backup=directory -destroy -var key1=value1 -var key2=value2'
-          expect(@client).to receive(:systemu).with(expected_command)
+          expected_options = { cwd: 'directory' }
+          expect(@client).to receive(:systemu).with(expected_command, expected_options)
           @client.send(:run, 'plan', variables, options)
         end
       end
@@ -201,7 +198,8 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
           }
 
           expected_command = '/usr/bin/terraform plan -backup=directory -destroy -var key1=value1 -var key2=value2'
-          expect(@client).to receive(:systemu).with(expected_command)
+          expected_options = { cwd: 'directory' }
+          expect(@client).to receive(:systemu).with(expected_command, expected_options)
           @client.send(:run, 'plan', variables, options)
         end
 
