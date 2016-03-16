@@ -132,7 +132,7 @@ Note: You didn't specify an "-out" parameter to save this plan, so when
     user_data:                   "" => "4f615704dd40b6986fa0776eddbed0539cea74a3"
     vpc_security_group_ids.#:    "" => "<computed>"
 
-+ module.tomcat.aws_instance.web_server
+~ module.tomcat.aws_instance.web_server
     ami:                         "" => "ami-c66326ac"
     associate_public_ip_address: "" => "1"
     availability_zone:           "" => "<computed>"
@@ -155,7 +155,7 @@ Note: You didn't specify an "-out" parameter to save this plan, so when
     user_data:                   "" => "73211fce6c7fae05e4545fadfce858c5b2d55050"
     vpc_security_group_ids.#:    "" => "<computed>"
 
-+ module.tomcat.aws_security_group.ap_security_group
+~ module.tomcat.aws_security_group.ap_security_group
     description:                           "" => "Enable AJP access via / JMX access"
     egress.#:                              "" => "<computed>"
     ingress.#:                             "" => "2"
@@ -190,7 +190,7 @@ Note: You didn't specify an "-out" parameter to save this plan, so when
     owner_id:                              "" => "<computed>"
     vpc_id:                                "" => "${var.vpc_id}"
 
-+ module.tomcat.aws_security_group.web_security_group
+- module.tomcat.aws_security_group.web_security_group
     description:                          "" => "Enable SSH access, HTTP access via port 80"
     egress.#:                             "" => "<computed>"
     ingress.#:                            "" => "1"
@@ -228,7 +228,7 @@ Note: You didn't specify an "-out" parameter to save this plan, so when
     user_data:                   "" => "0fefa25f96c3e2b3b0e8a17346f3adbcefe47760"
     vpc_security_group_ids.#:    "" => "<computed>"
 
-+ module.zabbix.aws_security_group.monitoring_security_group
+- module.zabbix.aws_security_group.monitoring_security_group
     description:                          "" => "Enable HTTP access via port 80, Zabbix-agent access"
     egress.#:                             "" => "<computed>"
     ingress.#:                            "" => "2"

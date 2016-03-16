@@ -6,3 +6,9 @@ MethodLength:
 
 Documentation:
   Enabled: false
+
+AbcSize:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false

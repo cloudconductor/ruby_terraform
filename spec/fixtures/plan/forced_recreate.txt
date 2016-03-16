@@ -1,0 +1,51 @@
+Refreshing Terraform state prior to plan...
+
+
+The Terraform execution plan has been generated and is shown below.
+Resources are shown in alphabetical order for quick scanning. Green resources
+will be created (or destroyed and then created if an existing resource
+exists), yellow resources are being changed in-place, and red resources
+will be destroyed.
+
+Note: You didn't specify an "-out" parameter to save this plan, so when
+"apply" is called, Terraform can't guarantee this is what will execute.
+
+-/+ module.tomcat.aws_security_group.web_security_group
+    description:                          "" => "Enable SSH access, HTTP access via port 80"
+    egress.#:                             "" => "<computed>"
+    ingress.#:                            "" => "1"
+    ingress.2214680975.cidr_blocks.#:     "" => "1"
+    ingress.2214680975.cidr_blocks.0:     "" => "0.0.0.0/0"
+    ingress.2214680975.from_port:         "" => "80"
+    ingress.2214680975.protocol:          "" => "tcp"
+    ingress.2214680975.security_groups.#: "" => "0"
+    ingress.2214680975.self:              "" => "0"
+    ingress.2214680975.to_port:           "" => "80"
+    name:                                 "" => "WebSecurityGroup"
+    owner_id:                             "" => "<computed>"
+    vpc_id:                               "" => "${var.vpc_id}"
+
+-/+ module.zabbix.aws_instance.monitoring_server
+    ami:                         "" => "ami-8c6c29e6"
+    associate_public_ip_address: "" => "1"
+    availability_zone:           "" => "<computed>"
+    ebs_block_device.#:          "" => "<computed>"
+    ephemeral_block_device.#:    "" => "<computed>"
+    instance_type:               "" => "t2.small"
+    key_name:                    "" => "develop-key"
+    placement_group:             "" => "<computed>"
+    private_dns:                 "" => "<computed>"
+    private_ip:                  "" => "<computed>"
+    public_dns:                  "" => "<computed>"
+    public_ip:                   "" => "<computed>"
+    root_block_device.#:         "" => "<computed>"
+    security_groups.#:           "" => "<computed>"
+    source_dest_check:           "" => "1"
+    subnet_id:                   "" => "${element(split(\", \", var.subnet_id), count.index)}"
+    tags.#:                      "" => "1"
+    tags.Name:                   "" => "MonitoringServer"
+    tenancy:                     "" => "<computed>"
+    user_data:                   "" => "0fefa25f96c3e2b3b0e8a17346f3adbcefe47760"
+    vpc_security_group_ids.#:    "" => "<computed>"
+
+Plan: 2 to add, 0 to change, 2 to destroy.

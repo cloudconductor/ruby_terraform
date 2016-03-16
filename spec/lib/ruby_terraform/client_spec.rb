@@ -67,16 +67,60 @@ module RubyTerraform
         expect { @client.plan }.to raise_error(RuntimeError)
       end
 
-      it 'return resources and outputs when execute successfully' do
+      it 'return resources which will be added when execute successfully' do
         status = double(:status, exitstatus: 0)
         stdout = File.read('spec/fixtures/plan/correct.txt')
         allow(@client).to receive(:run).and_return([status, stdout, ''])
-        result = @client.plan
+        resources = @client.plan[:add]
 
-        expect(result).to be_is_a(Hash)
-        expect(result.keys).to match_array(%w(module null_resource))
-        expect(result['module'].keys).to match_array(%w(cloud_conductor_init zabbix tomcat))
-        expect(result['module']['zabbix'].keys).to match_array(%w(aws_instance aws_security_group))
+        expect(resources).to be_is_a(Hash)
+        expect(resources.keys).to match_array(%w(module null_resource))
+        expect(resources['module'].keys).to match_array(%w(cloud_conductor_init zabbix tomcat))
+        expect(resources['module']['zabbix'].keys).to match_array(%w(aws_instance))
+      end
+
+      it 'return resources which will be destroyed when execute successfully' do
+        status = double(:status, exitstatus: 0)
+        stdout = File.read('spec/fixtures/plan/correct.txt')
+        allow(@client).to receive(:run).and_return([status, stdout, ''])
+        resources = @client.plan[:destroy]
+
+        expect(resources).to be_is_a(Hash)
+        expect(resources.keys).to match_array(%w(module))
+        expect(resources['module'].keys).to match_array(%w(zabbix tomcat))
+        expect(resources['module']['zabbix'].keys).to match_array(%w(aws_security_group))
+      end
+
+      it 'return resources which will be changed when execute successfully' do
+        status = double(:status, exitstatus: 0)
+        stdout = File.read('spec/fixtures/plan/correct.txt')
+        allow(@client).to receive(:run).and_return([status, stdout, ''])
+        resources = @client.plan[:change]
+
+        expect(resources).to be_is_a(Hash)
+        expect(resources.keys).to match_array(%w(module))
+        expect(resources['module'].keys).to match_array(%w(tomcat))
+        expect(resources['module']['tomcat'].keys).to match_array(%w(aws_instance aws_security_group))
+      end
+
+      it 'return resources which will be recreated forcibly when execute successfully' do
+        status = double(:status, exitstatus: 0)
+        stdout = File.read('spec/fixtures/plan/forced_recreate.txt')
+        allow(@client).to receive(:run).and_return([status, stdout, ''])
+        resources = @client.plan
+        add_resources = resources[:add]
+
+        expect(add_resources).to be_is_a(Hash)
+        expect(add_resources.keys).to match_array(%w(module))
+        expect(add_resources['module'].keys).to match_array(%w(zabbix tomcat))
+        expect(add_resources['module']['zabbix'].keys).to match_array(%w(aws_instance))
+
+        destroy_resources = resources[:destroy]
+
+        expect(destroy_resources).to be_is_a(Hash)
+        expect(destroy_resources.keys).to match_array(%w(module))
+        expect(destroy_resources['module'].keys).to match_array(%w(zabbix tomcat))
+        expect(destroy_resources['module']['zabbix'].keys).to match_array(%w(aws_instance))
       end
     end
 
@@ -124,16 +168,16 @@ module RubyTerraform
         expect { @client.show }.to raise_error(RuntimeError)
       end
 
-      it 'return resources and outputs when execute successfully' do
+      it 'return resources when execute successfully' do
         status = double(:status, exitstatus: 0)
         stdout = File.read('spec/fixtures/show/correct.txt')
         allow(@client).to receive(:run).and_return([status, stdout, ''])
-        result = @client.show
+        resources = @client.show
 
-        expect(result).to be_is_a(Hash)
-        expect(result.keys).to match_array(%w(module null_resource))
-        expect(result['module'].keys).to match_array(%w(common_network tomcat_cluster_pattern))
-        expect(result['module']['tomcat_cluster_pattern'].keys).to match_array(%w(openstack_compute_floatingip_v2 openstack_compute_instance_v2 openstack_compute_secgroup_v2))
+        expect(resources).to be_is_a(Hash)
+        expect(resources.keys).to match_array(%w(module null_resource))
+        expect(resources['module'].keys).to match_array(%w(common_network tomcat_cluster_pattern))
+        expect(resources['module']['tomcat_cluster_pattern'].keys).to match_array(%w(openstack_compute_floatingip_v2 openstack_compute_instance_v2 openstack_compute_secgroup_v2))
       end
     end
 

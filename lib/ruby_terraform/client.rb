@@ -19,10 +19,19 @@ module RubyTerraform
       status, stdout, stderr = run('plan', variables, options)
       fail "Execute terraform plan has been failed\n#{stderr}" unless [0, 2].include?(status.exitstatus)
 
-      {}.tap do |hash|
+      { add: {}, destroy: {}, change: {} }.tap do |hash|
         stdout.split("\n").each do |line|
-          next unless (match = line.match(/^\+ (.*)/))
-          build_hash(hash, match[1])
+          case line
+          when /^\-\/\+ (.*)/
+            build_hash(hash[:add], Regexp.last_match(1))
+            build_hash(hash[:destroy], Regexp.last_match(1))
+          when /^\+ (.*)/
+            build_hash(hash[:add], Regexp.last_match(1))
+          when /^\- (.*)/
+            build_hash(hash[:destroy], Regexp.last_match(1))
+          when /^\~ (.*)/
+            build_hash(hash[:change], Regexp.last_match(1))
+          end
         end
       end
     end
