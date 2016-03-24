@@ -323,6 +323,14 @@ frontend_addresses = 52.90.146.75, 52.90.150.49, 52.23.223.222, 52.90.144.144
 
         expect(@client.send(:options2command, options)).to eq(%q(-backup=directory\;\ sleep\ 1000 -destroy\;\ sleep\ 1000))
       end
+
+      it 'set multiple option when value is array' do
+        options = {
+          target: %w(dummy1 dummy2)
+        }
+
+        expect(@client.send(:options2command, options)).to eq('-target=dummy1 -target=dummy2')
+      end
     end
 
     describe '#build_hash' do

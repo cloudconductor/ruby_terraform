@@ -96,6 +96,8 @@ module RubyTerraform
       commands = options.map do |key, value|
         if value.nil?
           "-#{key.to_s.shellescape}"
+        elsif value.is_a?(Array)
+          value.map { |v| "-#{key.to_s.shellescape}=#{v.to_s.shellescape}" }.join(' ')
         else
           "-#{key.to_s.shellescape}=#{value.to_s.shellescape}"
         end
